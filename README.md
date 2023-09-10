@@ -6,7 +6,7 @@ This repository was created using the [CMake SFML Project Template](https://gith
 
 ## How to build the project
 
-1. You probably need to be able to compile c++ source code.
+1. These are instructions taken from the original project template on how to build the project using Cmake, but you can of course build it using your own methods if you want.
 1. If you want to add or remove any .cpp files, open [CMakeLists.txt](CMakeLists.txt) and change the source files listed in the [`add_executable`](CMakeLists.txt#L10) call in CMakeLists.txt to match the source files your project requires.
 1. Configure and build the project. Most popular IDEs support CMake projects with very little effort on your part.
     - [VS Code](https://code.visualstudio.com) via the [CMake extension](https://code.visualstudio.com/docs/cpp/cmake-linux)

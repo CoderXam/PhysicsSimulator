@@ -7,12 +7,17 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Physics Simulator");
     sf::Clock clock;
 
+    struct TailPart {
+        sf::CircleShape circle;
+        float alpha;
+    };
+
     struct Particle {
         sf::VertexArray vertices;
         sf::Vector2f position;
         sf::Vector2f velocity;
         sf::Vector2f acceleration;
-        std::vector<sf::CircleShape> tail;
+        std::vector<TailPart> tail;
         sf::VertexArray Varrow; //velocity vector graphics
         sf::VertexArray Aarrow; //acceleration vector graphics
     };
@@ -109,19 +114,29 @@ int main()
             particle.Aarrow[0].position = particle.position;
             particle.Aarrow[1].position = particle.position + particle.acceleration;
 
-            sf::CircleShape circle;
-            circle.setRadius(0.5);
-            circle.setPosition(particle.position);
-            particle.tail.push_back(circle);
+            TailPart tailPart;
+            tailPart.circle.setRadius(0.5);
+            tailPart.circle.setPosition(particle.position);
+            tailPart.alpha = 50;
+            tailPart.circle.setFillColor(sf::Color(255, 255, 255, tailPart.alpha));
+            if (particle.tail.size() < 2000)
+            {
+                particle.tail.push_back(tailPart);
+            }
 
             for (auto& tailPart : particle.tail)
             {
-                if (tailPart.getFillColor().a > 0)
+                if (tailPart.alpha > 0)
                 {
-                    tailPart.setFillColor(sf::Color(255,255,255, tailPart.getFillColor().a-1.f*deltaTime));
+                    tailPart.alpha -= 50*deltaTime;
                 }
-
-                window.draw(tailPart);
+                else if (tailPart.alpha <= 0)
+                {
+                    tailPart.alpha = 50;
+                    tailPart.circle.setPosition(particle.position);
+                }
+                tailPart.circle.setFillColor(sf::Color(255, 255, 255, round(tailPart.alpha)));
+                window.draw(tailPart.circle);
             }
 
             window.draw(particle.vertices);
