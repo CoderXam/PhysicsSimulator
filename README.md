@@ -4,9 +4,13 @@ This is a little project I'm working on to learn c++, physics and in general to 
 
 This repository was created using the [CMake SFML Project Template](https://github.com/SFML/cmake-sfml-project).
 
-## How to build the project
+## How to download
 
-1. These are instructions taken from the original project template on how to build the project using Cmake, but you can of course build it using your own methods if you want.
+Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and download any zipped file from the list.
+ 
+## Building the project yourself
+
+1. These are instructions taken from the original project template on how to build the project using CMake, but you can of course build it using your own methods if you want.
 1. If you want to add or remove any .cpp files, open [CMakeLists.txt](CMakeLists.txt) and change the source files listed in the [`add_executable`](CMakeLists.txt#L10) call in CMakeLists.txt to match the source files your project requires.
 1. Configure and build the project. Most popular IDEs support CMake projects with very little effort on your part.
     - [VS Code](https://code.visualstudio.com) via the [CMake extension](https://code.visualstudio.com/docs/cpp/cmake-linux)
