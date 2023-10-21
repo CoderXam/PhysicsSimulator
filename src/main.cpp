@@ -1,9 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include <math.h>
 
-//screen space is the coordinate system used by sfml
-//the origin is in the top left, right and down are positive
 //world space is the coordinate system used for calculations in the code
 //the origin is in the center, right and up are positive
 sf::Vector2f screenToWorld(const sf::Vector2f& screenPos) {
@@ -11,6 +10,8 @@ sf::Vector2f screenToWorld(const sf::Vector2f& screenPos) {
     float y = -(screenPos.y - 300);
     return sf::Vector2f(x, y);
 }
+//screen space is the coordinate system used by sfml
+//the origin is in the top left, right and down are positive
 sf::Vector2f worldToScreen(float x, float y) {
     float screenX = x + 400;
     float screenY = -y + 300;
@@ -27,6 +28,8 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Physics Simulator");
     sf::Clock clock;
+
+    std::cout << "Welcome to my physics simulator!" << std::endl;
 
     struct TailPart {
         sf::CircleShape circle;
@@ -108,15 +111,15 @@ int main()
         if (isMousePressed)
         {
             line[0].position = pressPosition;
-            line[0].color = sf::Color::Red;
+            line[0].color = sf::Color::Yellow;
 
             sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
             line[1].position = screenToWorld(sf::Vector2f(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)));  // End of the line
-            line[1].color = sf::Color::Magenta;
+            line[1].color = sf::Color::Yellow;
         }
 
         //the clear, draw, display cycle
-        window.clear(sf::Color::Black); //CLEAR THE SCREEN
+        window.clear(sf::Color::Black);
 
         float deltaTime = clock.restart().asSeconds(); //deltaTime = time difference between the previous frame and the one before that
 
@@ -129,11 +132,13 @@ int main()
 
             particle.distance = sqrt(particle.position.x* particle.position.x + particle.position.y * particle.position.y);
             particle.direction = atan2(particle.position.y, particle.position.x);
-
+            
+            //acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
+            particle.acceleration = sf::Vector2f(-1000000.f / (particle.distance * particle.distance) * cos(particle.direction),
+                -1000000.f / (particle.distance * particle.distance) * sin(particle.direction));
             velocity.y += particle.acceleration.y * deltaTime;
             velocity.x += particle.acceleration.x * deltaTime;
-            particle.acceleration = sf::Vector2f(1000000* -1.f/(particle.distance*particle.distance) * cos(particle.direction),
-                1000000* -1.f / (particle.distance*particle.distance)* sin(particle.direction));
+            
 
             for (size_t i = 0; i < particle.vertices.getVertexCount(); i++)
             {
@@ -146,7 +151,7 @@ int main()
             particle.Aarrow[0].position = particle.position;
             particle.Aarrow[1].position = particle.position + particle.acceleration;
 
-            if (particle.tail.size() < 1500)
+            if (particle.tail.size() < 2000)
             {
                 TailPart tailPart;
                 tailPart.circle.setRadius(0.5);
