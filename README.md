@@ -6,9 +6,9 @@ This repository was created using the [CMake SFML Project Template](https://gith
 
 ## Images
 
-(images/image_1.png)
+[Image 1](images/image_1.png)
 
-(images/image_2.png)
+[Image 2](images/image_2.png)
 
 ## Explanation and controls
 
