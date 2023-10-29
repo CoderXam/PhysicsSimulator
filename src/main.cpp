@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
+#include <string>
 
 //world space is the coordinate system used for calculations in the code
 //the origin is in the center, right and up are positive
@@ -29,7 +30,20 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "Physics Simulator");
     sf::Clock clock;
 
+    sf::Font font;
+    if (!font.loadFromFile("./fonts/LiberationSans-Regular.ttf"))
+    {
+        std::cout << "error: font load failed" << std::endl;
+    }
+    sf::Text frameRate;
+    frameRate.setFont(font);
+    frameRate.setString("Hello world");
+    frameRate.setCharacterSize(20);
+    frameRate.setFillColor(sf::Color::White);
+    
+
     std::cout << "Welcome to my physics simulator!" << std::endl;
+
 
     struct TailPart {
         sf::CircleShape circle;
@@ -122,6 +136,9 @@ int main()
         window.clear(sf::Color::Black);
 
         float deltaTime = clock.restart().asSeconds(); //deltaTime = time difference between the previous frame and the one before that
+        int fps = static_cast<int>(1.f / deltaTime);
+        std::string fpsString = "fps: " + std::to_string(fps);
+        frameRate.setString(fpsString);
 
         for (auto& particle : particles)
         {
@@ -212,6 +229,7 @@ int main()
         window.draw(center);
         center.setPosition(screenToWorld(center.getPosition()));
 
+        window.draw(frameRate);
         window.display();
     }
 
