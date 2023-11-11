@@ -35,11 +35,11 @@ int main()
     {
         std::cout << "error: font load failed" << std::endl;
     }
-    sf::Text frameRate;
-    frameRate.setFont(font);
-    frameRate.setString("Hello world");
-    frameRate.setCharacterSize(20);
-    frameRate.setFillColor(sf::Color::White);
+    sf::Text text;
+    text.setFont(font);
+    text.setString("Hello world");
+    text.setCharacterSize(20);
+    text.setFillColor(sf::Color::White);
     
 
     std::cout << "Welcome to my physics simulator!" << std::endl;
@@ -137,8 +137,8 @@ int main()
 
         float deltaTime = clock.restart().asSeconds(); //deltaTime = time difference between the previous frame and the one before that
         int fps = static_cast<int>(1.f / deltaTime);
-        std::string fpsString = "fps: " + std::to_string(fps);
-        frameRate.setString(fpsString);
+        std::string fpsString = "fps: " + std::to_string(fps) + "   particles: "+std::to_string(particles.size());
+        text.setString(fpsString);
 
         for (auto& particle : particles)
         {
@@ -229,7 +229,7 @@ int main()
         window.draw(center);
         center.setPosition(screenToWorld(center.getPosition()));
 
-        window.draw(frameRate);
+        window.draw(text);
         window.display();
     }
 
