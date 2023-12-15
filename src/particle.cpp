@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "../include/particle.h"
+#include <iostream>
 
 TailPart::TailPart(float circleRadius, sf::Vector2f initialPosition, float initialAlpha)
     :alpha(50)
@@ -31,6 +32,7 @@ Particle::Particle(sf::Vector2f initialPosition, sf::Vector2f initialVelocity)
     Arrow Aarrow(initialPosition, initialPosition, sf::Color().Red);
     arrows.push_back(Varrow);
     arrows.push_back(Aarrow);
+    locator = sf::CircleShape(15, 3);
 }
 
 void Particle::Move(float timeInterval)
@@ -53,4 +55,9 @@ void Particle::updateArrows()
     arrows[0].points[1].position = position + velocity;
     arrows[1].points[0].position = position;
     arrows[1].points[1].position = position + acceleration;
+}
+
+void Particle::toggleLocator(bool status)
+{
+
 }

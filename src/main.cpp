@@ -77,13 +77,13 @@ int main()
             line[1].color = sf::Color::Yellow;
         }
 
-        //the clear, draw, display cycle
-        window.clear(sf::Color::Black);
-
         float deltaTime = clock.restart().asSeconds(); //deltaTime = time difference between the previous frame and the one before that
         int fps = static_cast<int>(1.f / deltaTime);
         std::string fpsString = "fps: " + std::to_string(fps) + "   particles: "+std::to_string(particles.size());
         text.setString(fpsString);
+
+        // the clear, draw, display cycle
+        window.clear(sf::Color::Black);
 
         for (auto& particle : particles)
         {
@@ -98,22 +98,22 @@ int main()
             particle.updateArrows();
 
             //note that the end of the tail is the start of the vector
-            if (particle.tail.size() < 2000)
+            if (particle.tail.size() < 1000)
             {
-                TailPart tailPart(0.6, particle.position, 50);
+                TailPart tailPart(0.6, particle.position, 255);
                 particle.tail.push_back(tailPart);
             }
-            else if (particle.tail.size() == 2000)
+            else if (particle.tail.size() == 1000)
             {
                 std::rotate(particle.tail.begin(), particle.tail.begin() + 1, particle.tail.end());
                 particle.tail.back().circle.setPosition(particle.position);
-                particle.tail.back().alpha = 50;
+                particle.tail.back().alpha = 255;
                 particle.tail.back().circle.setFillColor(sf::Color(255, 255, 255, particle.tail.back().alpha));
                 for (int i = 0; i < particle.tail.size(); i++)
                 {
-                    if (i * 0.2 < 255)
+                    if (i * 0.4 < 255)
                     {
-                        particle.tail[i].alpha = i * 0.2;
+                        particle.tail[i].alpha = i * 0.4;
                         particle.tail[i].circle.setFillColor(sf::Color(255, 255, 255, particle.tail[i].alpha));
                     }
                 }
@@ -143,6 +143,32 @@ int main()
                 window.draw(particle.arrows[i].points);
                 particle.arrows[i].points[0].position = screenToWorld(particle.arrows[i].points[0].position);
                 particle.arrows[i].points[1].position = screenToWorld(particle.arrows[i].points[1].position);
+            }
+
+            // average most well written code in dodge the dood
+            if (worldToScreen(particle.position.x, particle.position.y).x > window.getSize().x)
+            {
+                particle.locator.setPosition(sf::Vector2f(window.getSize().x - 10, worldToScreen(particle.position.x, particle.position.y).y - 15));
+                particle.locator.setRotation(90);
+                window.draw(particle.locator);
+            }
+            else if (worldToScreen(particle.position.x, particle.position.y).y > window.getSize().y)
+            {
+                particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x + 15, window.getSize().y - 10));
+                particle.locator.setRotation(180);
+                window.draw(particle.locator);
+            }
+            else if (worldToScreen(particle.position.x, particle.position.y).x < 0)
+            {
+                particle.locator.setPosition(sf::Vector2f( 10, worldToScreen(particle.position.x, particle.position.y).y + 15));
+                particle.locator.setRotation(270);
+                window.draw(particle.locator);
+            }
+            else if (worldToScreen(particle.position.x, particle.position.y).y < 0)
+            {
+                particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x - 15, 10));
+                particle.locator.setRotation(0);
+                window.draw(particle.locator);
             }
 
         }
