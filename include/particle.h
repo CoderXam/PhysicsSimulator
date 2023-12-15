@@ -32,6 +32,4 @@ public:
     void Move(float timeInterval);
     void setVerticesPositions();
     void updateArrows();
-    int findLocation(sf::Vector2f position, sf::RenderWindow& window);
-    void toggleLocator(bool status);
 };

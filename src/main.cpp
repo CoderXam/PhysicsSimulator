@@ -90,8 +90,8 @@ int main()
             sf::Vector2f& velocity = particle.velocity;
 
             // acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
-            particle.acceleration.x = -1000000.f / (getMagnitude(particle.position)* getMagnitude(particle.position)) * cos(getDirection(particle.position));
-            particle.acceleration.y = -1000000.f / (getMagnitude(particle.position)* getMagnitude(particle.position)) * sin(getDirection(particle.position));
+            particle.acceleration.x = -1000000.f / (getMagnitude(particle.position) * getMagnitude(particle.position)) * cos(getDirection(particle.position));
+            particle.acceleration.y = -1000000.f / (getMagnitude(particle.position) * getMagnitude(particle.position)) * sin(getDirection(particle.position));
             
             particle.Move(deltaTime);
             particle.setVerticesPositions();
@@ -146,7 +146,7 @@ int main()
             }
             
             particle.locatorActive = true;
-            switch (particle.findLocation(worldToScreen(particle.position.x, particle.position.y), window))
+            switch (locate(worldToScreen(particle.position.x, particle.position.y), window))
             {
                 case 1:
                     particle.locator.setPosition(sf::Vector2f(3, 13));
