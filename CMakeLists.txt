@@ -7,7 +7,18 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(PhysicsSimulator src/main.cpp)
+add_executable(PhysicsSimulator
+    src/main.cpp
+    src/log.cpp
+    src/coordinate.cpp
+    src/calculations.cpp
+    src/particle.cpp
+    include/log.h
+    include/coordinate.h
+    include/calculations.h
+    include/particle.h
+)
+
 target_link_libraries(PhysicsSimulator PRIVATE sfml-graphics)
 target_compile_features(PhysicsSimulator PRIVATE cxx_std_17)
 if (WIN32 AND BUILD_SHARED_LIBS)

@@ -3,27 +3,10 @@
 #include <iostream>
 #include <math.h>
 #include <string>
-
-//world space is the coordinate system used for calculations in the code
-//the origin is in the center, right and up are positive
-sf::Vector2f screenToWorld(const sf::Vector2f& screenPos) {
-    float x = screenPos.x - 400;
-    float y = -(screenPos.y - 300);
-    return sf::Vector2f(x, y);
-}
-//screen space is the coordinate system used by sfml
-//the origin is in the top left, right and down are positive
-sf::Vector2f worldToScreen(float x, float y) {
-    float screenX = x + 400;
-    float screenY = -y + 300;
-    return sf::Vector2f(screenX, screenY);
-}
-
-void printVec(sf::Vector2f vector) {
-    std::cout << vector.x;
-    std::cout << ", ";
-    std::cout << vector.y << std::endl;
-}
+#include "../include/log.h"
+#include "../include/coordinate.h"
+#include "../include/calculations.h"
+#include "../include/particle.h"
 
 int main()
 {
@@ -37,38 +20,20 @@ int main()
     }
     sf::Text text;
     text.setFont(font);
-    text.setString("Hello world");
     text.setCharacterSize(20);
-    text.setFillColor(sf::Color::White);
-    
+    text.setFillColor(sf::Color::White); 
 
     std::cout << "Welcome to my physics simulator!" << std::endl;
-
-
-    struct TailPart {
-        sf::CircleShape circle;
-        float alpha;
-    };
-
-    struct Particle {
-        sf::VertexArray vertices;
-        sf::Vector2f position;
-        float distance;
-        float direction;
-        sf::Vector2f velocity;
-        sf::Vector2f acceleration;
-        std::vector<TailPart> tail;
-        sf::VertexArray Varrow; //velocity vector graphics
-        sf::VertexArray Aarrow; //acceleration vector graphics
-    };
+    std::cout << "created by Max Levine" << std::endl;
 
     std::vector<Particle> particles;
 
     bool isMousePressed = false;
     sf::Vector2f pressPosition;
+    sf::Vector2f releasePosition;
     sf::Vertex line[2];
 
-    sf::CircleShape center = sf::CircleShape(5);
+    sf::RectangleShape center = sf::RectangleShape(sf::Vector2f(10,10));
     center.setPosition(-5, 5);
     center.setFillColor(sf::Color(255, 255, 255));
 
@@ -90,29 +55,9 @@ int main()
             {
                 if (isMousePressed)
                 {
-                    Particle particle;
-                    particle.position = pressPosition;
-                    particle.vertices = sf::VertexArray(sf::TriangleFan, 4);
-                    particle.vertices[0].position = particle.position + sf::Vector2f(10.f, 10.f);
-                    particle.vertices[1].position = particle.position + sf::Vector2f(10.f, -10.f);
-                    particle.vertices[2].position = particle.position + sf::Vector2f(-10.f, -10.f);
-                    particle.vertices[3].position = particle.position + sf::Vector2f(-10.f, 10.f);
-                    particle.vertices[0].color = sf::Color::Cyan;
-                    particle.vertices[1].color = sf::Color::Cyan;
-                    particle.vertices[2].color = sf::Color::Cyan;
-                    particle.vertices[3].color = sf::Color::Blue;
-                    particle.velocity = screenToWorld(sf::Vector2f(static_cast<float>(event.mouseButton.x),
-                        static_cast<float>(event.mouseButton.y)))-pressPosition;
-                    particle.Varrow = sf::VertexArray(sf::Lines, 2);
-                    particle.Varrow[0].position = particle.position + pressPosition;
-                    particle.Varrow[1].position = particle.position + particle.velocity;
-                    particle.Varrow[0].color = sf::Color::Yellow;
-                    particle.Varrow[1].color = sf::Color::Yellow;
-                    particle.Aarrow = sf::VertexArray(sf::Lines, 2);
-                    particle.Aarrow[0].position = particle.position + pressPosition;
-                    particle.Aarrow[1].position = particle.position + particle.acceleration;
-                    particle.Aarrow[0].color = sf::Color::Red;
-                    particle.Aarrow[1].color = sf::Color::Red;
+                    releasePosition = screenToWorld(sf::Vector2f(static_cast<float>(event.mouseButton.x),
+                        static_cast<float>(event.mouseButton.y)));
+                    Particle particle(pressPosition, releasePosition - pressPosition);
                     particles.push_back(particle);
                 }
                 isMousePressed = false;
@@ -144,37 +89,17 @@ int main()
         {
             sf::Vector2f& velocity = particle.velocity;
 
-            float& distance = particle.distance;
-            float& direction = particle.direction;
-
-            particle.distance = sqrt(particle.position.x* particle.position.x + particle.position.y * particle.position.y);
-            particle.direction = atan2(particle.position.y, particle.position.x);
+            // acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
+            particle.acceleration.x = -1000000.f / (getMagnitude(particle.position)* getMagnitude(particle.position)) * cos(getDirection(particle.position));
+            particle.acceleration.y = -1000000.f / (getMagnitude(particle.position)* getMagnitude(particle.position)) * sin(getDirection(particle.position));
             
-            //acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
-            particle.acceleration = sf::Vector2f(-1000000.f / (particle.distance * particle.distance) * cos(particle.direction),
-                -1000000.f / (particle.distance * particle.distance) * sin(particle.direction));
-            velocity.y += particle.acceleration.y * deltaTime;
-            velocity.x += particle.acceleration.x * deltaTime;
-            
-
-            for (size_t i = 0; i < particle.vertices.getVertexCount(); i++)
-            {
-                particle.vertices[i].position += velocity * deltaTime;
-            }
-            particle.position += velocity * deltaTime;
-
-            particle.Varrow[0].position = particle.position;
-            particle.Varrow[1].position = particle.position + particle.velocity;
-            particle.Aarrow[0].position = particle.position;
-            particle.Aarrow[1].position = particle.position + particle.acceleration;
+            particle.Move(deltaTime);
+            particle.setVerticesPositions();
+            particle.updateArrows();
 
             if (particle.tail.size() < 2000)
             {
-                TailPart tailPart;
-                tailPart.circle.setRadius(0.5);
-                tailPart.circle.setPosition(particle.position);
-                tailPart.alpha = 50;
-                tailPart.circle.setFillColor(sf::Color(255, 255, 255, tailPart.alpha));
+                TailPart tailPart(0.5, particle.position, 50);
                 particle.tail.push_back(tailPart);
             }
             
@@ -196,26 +121,25 @@ int main()
                 tailPart.circle.setPosition(screenToWorld(tailPart.circle.getPosition()));
             }
             
-            for (size_t i = 0; i < particle.vertices.getVertexCount(); i++)
+            for (int i = 0; i < particle.vertices.getVertexCount(); i++)
             {
                 particle.vertices[i].position = worldToScreen(particle.vertices[i].position.x, particle.vertices[i].position.y);
             }
             window.draw(particle.vertices);
-            for (size_t i = 0; i < particle.vertices.getVertexCount(); i++)
+            for (int i = 0; i < particle.vertices.getVertexCount(); i++)
             {
                 particle.vertices[i].position = screenToWorld(particle.vertices[i].position);
             }
+            
+            for (int i = 0; i < particle.arrows.size(); i++)
+            {
+                particle.arrows[i].points[0].position = worldToScreen(particle.arrows[i].points[0].position.x, particle.arrows[i].points[0].position.y);
+                particle.arrows[i].points[1].position = worldToScreen(particle.arrows[i].points[1].position.x, particle.arrows[i].points[1].position.y);
+                window.draw(particle.arrows[i].points);
+                particle.arrows[i].points[0].position = screenToWorld(particle.arrows[i].points[0].position);
+                particle.arrows[i].points[1].position = screenToWorld(particle.arrows[i].points[1].position);
+            }
 
-            particle.Varrow[0].position = worldToScreen(particle.Varrow[0].position.x, particle.Varrow[0].position.y);
-            particle.Varrow[1].position = worldToScreen(particle.Varrow[1].position.x, particle.Varrow[1].position.y);
-            particle.Aarrow[0].position = worldToScreen(particle.Aarrow[0].position.x, particle.Aarrow[0].position.y);
-            particle.Aarrow[1].position = worldToScreen(particle.Aarrow[1].position.x, particle.Aarrow[1].position.y);
-            window.draw(particle.Varrow);
-            window.draw(particle.Aarrow);
-            particle.Varrow[0].position = screenToWorld(particle.Varrow[0].position);
-            particle.Varrow[1].position = screenToWorld(particle.Varrow[1].position);
-            particle.Aarrow[0].position = screenToWorld(particle.Aarrow[0].position);
-            particle.Aarrow[1].position = screenToWorld(particle.Aarrow[1].position);
         }
         if (isMousePressed) {
             line[0].position = worldToScreen(line[0].position.x, line[0].position.y);
