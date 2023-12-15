@@ -97,25 +97,30 @@ int main()
             particle.setVerticesPositions();
             particle.updateArrows();
 
+            //note that the end of the tail is the start of the vector
             if (particle.tail.size() < 2000)
             {
-                TailPart tailPart(0.5, particle.position, 50);
+                TailPart tailPart(0.6, particle.position, 50);
                 particle.tail.push_back(tailPart);
             }
+            else if (particle.tail.size() == 2000)
+            {
+                std::rotate(particle.tail.begin(), particle.tail.begin() + 1, particle.tail.end());
+                particle.tail.back().circle.setPosition(particle.position);
+                particle.tail.back().alpha = 50;
+                particle.tail.back().circle.setFillColor(sf::Color(255, 255, 255, particle.tail.back().alpha));
+                for (int i = 0; i < particle.tail.size(); i++)
+                {
+                    if (i * 0.2 < 255)
+                    {
+                        particle.tail[i].alpha = i * 0.2;
+                        particle.tail[i].circle.setFillColor(sf::Color(255, 255, 255, particle.tail[i].alpha));
+                    }
+                }
+            } 
             
             for (auto& tailPart : particle.tail)
             {
-                if (tailPart.alpha > 0)
-                {
-                    tailPart.alpha -= 50*deltaTime;
-                }
-                else if (tailPart.alpha <= 0)
-                {
-                    tailPart.alpha = 50;
-                    tailPart.circle.setPosition(particle.position);
-                }
-                tailPart.circle.setFillColor(sf::Color(255, 255, 255, round(tailPart.alpha)));
-
                 tailPart.circle.setPosition(worldToScreen(tailPart.circle.getPosition().x, tailPart.circle.getPosition().y));
                 window.draw(tailPart.circle);
                 tailPart.circle.setPosition(screenToWorld(tailPart.circle.getPosition()));
