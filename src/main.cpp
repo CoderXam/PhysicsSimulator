@@ -144,33 +144,49 @@ int main()
                 particle.arrows[i].points[0].position = screenToWorld(particle.arrows[i].points[0].position);
                 particle.arrows[i].points[1].position = screenToWorld(particle.arrows[i].points[1].position);
             }
-
-            // average most well written code in dodge the dood
-            if (worldToScreen(particle.position.x, particle.position.y).x > window.getSize().x)
+            
+            particle.locatorActive = true;
+            switch (particle.findLocation(worldToScreen(particle.position.x, particle.position.y), window))
             {
-                particle.locator.setPosition(sf::Vector2f(window.getSize().x - 10, worldToScreen(particle.position.x, particle.position.y).y - 15));
-                particle.locator.setRotation(90);
-                window.draw(particle.locator);
+                case 1:
+                    particle.locator.setPosition(sf::Vector2f(3, 13));
+                    particle.locator.setRotation(315);
+                    break;
+                case 2:
+                    particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x - 12, 5));
+                    particle.locator.setRotation(0);
+                    break;
+                case 3:
+                    particle.locator.setPosition(window.getSize().x-13, 3);
+                    particle.locator.setRotation(45);
+                    break;
+                case 4:
+                    particle.locator.setPosition(sf::Vector2f(5, worldToScreen(particle.position.x, particle.position.y).y + 12));
+                    particle.locator.setRotation(270);
+                    break;
+                case 5:
+                    particle.locatorActive = false;
+                    break;
+                case 6:
+                    particle.locator.setPosition(sf::Vector2f(window.getSize().x - 5, worldToScreen(particle.position.x, particle.position.y).y - 12));
+                    particle.locator.setRotation(90);
+                    break;
+                case 7:
+                    particle.locator.setPosition(13, window.getSize().y-3);
+                    particle.locator.setRotation(225);
+                    break;
+                case 8:
+                    particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x + 12, window.getSize().y - 5));
+                    particle.locator.setRotation(180);
+                    break;
+                case 9:
+                    particle.locator.setPosition(window.getSize().x-3, window.getSize().y - 13);
+                    particle.locator.setRotation(135);
+                    break;
+                default: std::cout << "bruh" << std::endl;
             }
-            else if (worldToScreen(particle.position.x, particle.position.y).y > window.getSize().y)
-            {
-                particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x + 15, window.getSize().y - 10));
-                particle.locator.setRotation(180);
+            if (particle.locatorActive)
                 window.draw(particle.locator);
-            }
-            else if (worldToScreen(particle.position.x, particle.position.y).x < 0)
-            {
-                particle.locator.setPosition(sf::Vector2f( 10, worldToScreen(particle.position.x, particle.position.y).y + 15));
-                particle.locator.setRotation(270);
-                window.draw(particle.locator);
-            }
-            else if (worldToScreen(particle.position.x, particle.position.y).y < 0)
-            {
-                particle.locator.setPosition(sf::Vector2f(worldToScreen(particle.position.x, particle.position.y).x - 15, 10));
-                particle.locator.setRotation(0);
-                window.draw(particle.locator);
-            }
-
         }
         if (isMousePressed) {
             line[0].position = worldToScreen(line[0].position.x, line[0].position.y);

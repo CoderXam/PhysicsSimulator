@@ -24,12 +24,14 @@ public:
     std::vector<TailPart> tail;
     std::vector<Arrow> arrows;
     sf::CircleShape locator;
+    int location;
+    bool locatorActive;
     static bool arrowsVisible;
-    static bool locatorsActive;
 
     Particle(sf::Vector2f initialPosition, sf::Vector2f initialVelocity);
     void Move(float timeInterval);
     void setVerticesPositions();
     void updateArrows();
+    int findLocation(sf::Vector2f position, sf::RenderWindow& window);
     void toggleLocator(bool status);
 };
