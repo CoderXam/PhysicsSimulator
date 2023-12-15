@@ -26,31 +26,39 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
 
 1. You will need:
 - CMake
-- Something to build executables (example: GNU make)
-- Something to compile c++ code (example: g++)
+- Something to build executables (example: GNU Make or MinGW Make)
+- Something to compile c++ code (example: gcc/g++)
 
 1. If you want to add or remove any .cpp files, open [CMakeLists.txt](CMakeLists.txt) and change the source files listed in the [`add_executable`](CMakeLists.txt#L10) call in CMakeLists.txt to match the source files your project requires.
-1. Type the following commands while in the project source directory, note that if a build system generator is not specified cmake will use the default generator.
+1. To generate the build system:
+    ```
+    cmake -S <source-directory> -B <build-directory> -G <generator-name>
+    ```
+    If no generator is specified cmake will choose a default. If you are on windows this will likely be a visual studio solution generator which I personally tend to avoid. For the build directory I recommend creating a directory called "build" in the main project directory.
 
-    For a single-configuration generator (typically the case on Linux and macOS):
+1. Once the files have been generated you can then run Make or use the command
     ```
-    cmake -S . -B build -G <generator-name> -DCMAKE_BUILD_TYPE=Release
-    cmake --build build
-    ```
-
-    For a multi-configuration generator (typically the case on Windows):
-    ```
-    cmake -S . -B build -G <generator-name>
-    cmake --build build --config Release
+    cmake --build <build-directory>
     ```
 
-    For help using cmake:
+    For help using cmake run
     ```
     cmake --help
     ```
-1. If you want to make any changes to existing source files, save the files then enter the --build command again to rebuild the project.
+1. If you want to make any changes to existing source files, save the files then run make or enter the cmake --build command again to rebuild the project. No need to recreate the makefiles (or equivalent).
 1. The executable will be created somewhere in the build directory.
+1. Not sure how to properly set up for debug and release modes yet. I think it builds in release by default.
 
 ## License
 
 The source code is dual licensed under Public Domain and MIT -- choose whichever you prefer.
+
+## Resources
+
+Some resources that helped me out for this project:
+Low Level Game Dev: https://www.youtube.com/@lowlevelgamedev9330 (game dev, inspiration)
+The Cherno: https://www.youtube.com/watch?v=18c3MTX0PK0&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb (c++ tutorials)
+Code, Tech, and Tutorials: https://www.youtube.com/@CodeTechandTutorials (c++ and cmake tutorial)
+SFML: https://www.sfml-dev.org/ (sfml help and tutorials)
+This guy is also cool (javidx9/One Lone Coder): https://www.youtube.com/@javidx9
+Of course Stack Overflow and ChatGPT have also been good help for this project as well as other random forums and stack exchanges. 
