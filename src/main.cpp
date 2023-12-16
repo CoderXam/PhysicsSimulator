@@ -16,7 +16,10 @@ int main()
     sf::Font font;
     if (!font.loadFromFile("./fonts/LiberationSans-Regular.ttf"))
     {
-        std::cout << "error: font load failed" << std::endl;
+        if (!font.loadFromFile("../fonts/LiberationSans-Regular.ttf"))
+        {
+            std::cout << "error: font load failed" << std::endl;
+        }
     }
     sf::Text text;
     text.setFont(font);
@@ -90,8 +93,8 @@ int main()
             sf::Vector2f& velocity = particle.velocity;
 
             // acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
-            particle.acceleration.x = -1000000.f / (getMagnitude(particle.position) * getMagnitude(particle.position)) * cos(getDirection(particle.position));
-            particle.acceleration.y = -1000000.f / (getMagnitude(particle.position) * getMagnitude(particle.position)) * sin(getDirection(particle.position));
+            particle.acceleration.x = -1000000.f / (particle.position.x * particle.position.x + particle.position.y * particle.position.y) * cos(getDirection(particle.position));
+            particle.acceleration.y = -1000000.f / (particle.position.x * particle.position.x + particle.position.y * particle.position.y) * sin(getDirection(particle.position));
             
             particle.Move(deltaTime);
             particle.setVerticesPositions();
