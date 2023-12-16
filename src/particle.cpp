@@ -56,3 +56,8 @@ void Particle::updateArrows()
     arrows[1].points[0].position = position;
     arrows[1].points[1].position = position + acceleration;
 }
+
+// Cursed c++ (ChatGPT wrote this i have no clue what it means)
+bool Particle::operator==(const Particle& other) const {
+    return position == other.position && position == other.position;
+}

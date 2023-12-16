@@ -29,6 +29,8 @@ public:
     bool locatorActive;
     static bool arrowsVisible;
 
+    bool operator==(const Particle& other) const;
+
     Particle(sf::Vector2f initialPosition, sf::Vector2f initialVelocity);
     void Move(float timeInterval);
     void setVerticesPositions();

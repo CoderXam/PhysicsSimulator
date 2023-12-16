@@ -21,6 +21,7 @@ int main()
             std::cout << "error: font load failed" << std::endl;
         }
     }
+
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(20);
@@ -92,6 +93,13 @@ int main()
         {
             sf::Vector2f& velocity = particle.velocity;
 
+            if (getMagnitude(particle.position) < 1)
+            {
+                particles.erase(std::remove(particles.begin(), particles.end(), particle), particles.end());
+                std::cout << "particle destroyed by center" << std::endl;
+                break;
+            }
+
             // acceleration is calculated using Newton's law of universal gravitation where the force of gravity is inversely proportional to the square of the distance.
             particle.acceleration.x = -1000000.f / (particle.position.x * particle.position.x + particle.position.y * particle.position.y) * cos(getDirection(particle.position));
             particle.acceleration.y = -1000000.f / (particle.position.x * particle.position.x + particle.position.y * particle.position.y) * sin(getDirection(particle.position));
@@ -102,6 +110,8 @@ int main()
 
             //note that the end of the tail is the start of the vector
             particle.maxTailSize = 750.f * exp(-0.001f * getMagnitude(particle.velocity));
+            if (particle.maxTailSize > 3000)
+                particle.maxTailSize = 3000;
             if (particle.tail.size() <  particle.maxTailSize)
             {
                 TailPart tailPart(0.6, particle.position, 255);
