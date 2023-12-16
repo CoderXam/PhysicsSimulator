@@ -51,10 +51,6 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
 1. The executable will be created somewhere in the build directory.
 1. Not sure how to properly set up for debug and release modes yet. I think it builds in release by default.
 
-## License
-
-The source code is dual licensed under Public Domain and MIT -- choose whichever you prefer.
-
 ## Resources
 
 Some resources that helped me out for this project:
@@ -72,3 +68,7 @@ This guy is also cool (javidx9/One Lone Coder): https://www.youtube.com/@javidx9
 Desmos is always good for general math and finding the right math functions https://www.desmos.com/calculator
 
 Of course Stack Overflow and ChatGPT have also been good help for this project as well as other random forums and stack exchanges. 
+
+## License
+
+The source code is dual licensed under Public Domain and MIT -- choose whichever you prefer.
