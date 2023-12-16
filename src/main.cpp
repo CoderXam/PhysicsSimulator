@@ -18,7 +18,10 @@ int main()
     {
         if (!font.loadFromFile("../fonts/LiberationSans-Regular.ttf"))
         {
-            std::cout << "error: font load failed" << std::endl;
+            if (!font.loadFromFile("../../fonts/LiberationSans-Regular.ttf"))
+            {
+                std::cout << "error: font load failed" << std::endl;
+            }
         }
     }
 
