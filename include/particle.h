@@ -8,17 +8,18 @@ struct TailPart
     TailPart(float circleRadius, sf::Vector2f initialPosition, float initialAlpha);
 };
 
-class Arrow
-{
-public:
-    sf::VertexArray points;
-
-    Arrow(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color arrowColor);
-};
 
 class Particle
 {
 public:
+    class Arrow
+    {
+    public:
+        sf::VertexArray points;
+
+        Arrow(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color arrowColor);
+    };
+
     sf::VertexArray vertices;
     sf::Vector2f position, velocity, acceleration;
     std::vector<TailPart> tail;

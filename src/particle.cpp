@@ -10,7 +10,7 @@ TailPart::TailPart(float circleRadius, sf::Vector2f initialPosition, float initi
     circle.setFillColor(sf::Color(255, 255, 255, alpha));
 }
 
-Arrow::Arrow(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color arrowColor)
+Particle::Arrow::Arrow(sf::Vector2f startPosition, sf::Vector2f endPosition, sf::Color arrowColor)
 {
     points = sf::VertexArray(sf::Lines, 2);
     points[0].position = startPosition;
