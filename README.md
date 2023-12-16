@@ -57,14 +57,16 @@ The source code is dual licensed under Public Domain and MIT -- choose whichever
 
 Some resources that helped me out for this project:
 
-Low Level Game Dev: https://www.youtube.com/@lowlevelgamedev9330 (game dev, inspiration)
+Low Level Game Dev: https://www.youtube.com/@lowlevelgamedev9330 (c++, game dev, inspiration)
 
-The Cherno: https://www.youtube.com/watch?v=18c3MTX0PK0&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb (c++ tutorials)
+The Cherno: https://www.youtube.com/watch?v=18c3MTX0PK0&list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb (c++ content and tutorials)
 
-Code, Tech, and Tutorials: https://www.youtube.com/@CodeTechandTutorials (c++ and cmake tutorial)
+Code, Tech, and Tutorials: https://www.youtube.com/@CodeTechandTutorials (c++ and cmake tutorials)
 
-SFML: https://www.sfml-dev.org/ (sfml help and tutorials)
+SFML: https://www.sfml-dev.org/learn.php (sfml help and tutorials)
 
 This guy is also cool (javidx9/One Lone Coder): https://www.youtube.com/@javidx9
+
+Desmos is always good for general math and finding the right math functions https://www.desmos.com/calculator
 
 Of course Stack Overflow and ChatGPT have also been good help for this project as well as other random forums and stack exchanges. 
