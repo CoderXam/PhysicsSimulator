@@ -76,7 +76,7 @@ int main()
             line[1].position = screenToWorld(sf::Vector2f(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)));  // End of the line
             line[1].color = sf::Color::Yellow;
         }
-
+        
         float deltaTime = clock.restart().asSeconds(); //deltaTime = time difference between the previous frame and the one before that
         int fps = static_cast<int>(1.f / deltaTime);
         std::string fpsString = "fps: " + std::to_string(fps) + "   particles: "+std::to_string(particles.size());
@@ -98,26 +98,29 @@ int main()
             particle.updateArrows();
 
             //note that the end of the tail is the start of the vector
-            if (particle.tail.size() < 1000)
+            particle.maxTailSize = 750.f * exp(-0.001f * getMagnitude(particle.velocity));
+            if (particle.tail.size() <  particle.maxTailSize)
             {
                 TailPart tailPart(0.6, particle.position, 255);
                 particle.tail.push_back(tailPart);
             }
-            else if (particle.tail.size() == 1000)
+            else if (particle.tail.size() >= particle.maxTailSize)
             {
+                if (particle.tail.size() > particle.maxTailSize)
+                    particle.tail.erase(particle.tail.begin());
                 std::rotate(particle.tail.begin(), particle.tail.begin() + 1, particle.tail.end());
                 particle.tail.back().circle.setPosition(particle.position);
                 particle.tail.back().alpha = 255;
-                particle.tail.back().circle.setFillColor(sf::Color(255, 255, 255, particle.tail.back().alpha));
+                particle.tail.back().circle.setFillColor(sf::Color(255, 255, 255, round(particle.tail.back().alpha)));
                 for (int i = 0; i < particle.tail.size(); i++)
                 {
-                    if (i * 0.4 < 255)
+                    if (i * 0.5 < 255)
                     {
-                        particle.tail[i].alpha = i * 0.4;
-                        particle.tail[i].circle.setFillColor(sf::Color(255, 255, 255, particle.tail[i].alpha));
+                        particle.tail[i].alpha = i * 0.5;
+                        particle.tail[i].circle.setFillColor(sf::Color(255, 255, 255, round(particle.tail[i].alpha)));
                     }
                 }
-            } 
+            }
             
             for (auto& tailPart : particle.tail)
             {
@@ -203,6 +206,5 @@ int main()
         window.draw(text);
         window.display();
     }
-
     return 0;
 }

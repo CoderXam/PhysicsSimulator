@@ -22,6 +22,7 @@ public:
     sf::VertexArray vertices;
     sf::Vector2f position, velocity, acceleration;
     std::vector<TailPart> tail;
+    int maxTailSize;
     std::vector<Arrow> arrows;
     sf::CircleShape locator;
     int location;
