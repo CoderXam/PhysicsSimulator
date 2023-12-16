@@ -8,7 +8,7 @@ This repository was created using the [CMake SFML Project Template](https://gith
 
 ![Image 1](images/image_1.png)
 
-![Image 2](images/image_2.png)
+![Image 3](images/image_3.png)
 
 ## Explanation and controls
 
@@ -17,6 +17,8 @@ Current version simulates gravitational force exerted from a single point.
 Click or drag to create particles. Right click to remove them.
 
 The red lines show the acceleration of the particles and the yellow lines show the velocity.
+
+Note that the text showing fps and particle count only works when running the program from the main project source directory (run ``` ./build/PhysicsSimulator.exe ```)
 
 ## How to download
 
