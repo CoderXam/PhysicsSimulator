@@ -18,8 +18,6 @@ Click or drag to create particles. Right click to remove them.
 
 The red lines show the acceleration of the particles and the yellow lines show the velocity.
 
-Note that the text showing fps and particle count only works when running the program from the main project source directory (run ``` ./build/PhysicsSimulator.exe ```)
-
 ## How to download
 
 Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and download any zipped file from the list.
@@ -34,13 +32,13 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
 1. If you want to add or remove any .cpp files, open [CMakeLists.txt](CMakeLists.txt) and change the source files listed in the [`add_executable`](CMakeLists.txt#L10) call in CMakeLists.txt to match the source files your project requires.
 1. To generate the build system:
     ```
-    cmake -S <source-directory> -B <build-directory> -G <generator-name>
+    cmake -S . -B build -G <generator-name>
     ```
-    If no generator is specified cmake will choose a default. If you are on windows this will likely be a visual studio solution generator which I personally tend to avoid. For the build directory I recommend creating a directory called "build" in the main project directory.
+    If no generator is specified cmake will choose a default. If you are on windows this will likely be a visual studio solution generator which I personally tend to avoid as you might have to change a few settings.
 
 1. Once the files have been generated you can then run Make or use the command
     ```
-    cmake --build <build-directory>
+    cmake --build build
     ```
 
     For help using cmake run
