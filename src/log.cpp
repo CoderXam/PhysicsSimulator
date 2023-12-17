@@ -36,7 +36,7 @@ public:
 
 // maybe put this in the log class
 // Prints a 2d vector to the console in the format "x, y"
-void printVec(sf::Vector2f& vector)
+void printVec(const sf::Vector2f& vector)
 {
     std::cout << vector.x << ", " << vector.y << std::endl;
 }

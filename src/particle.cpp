@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "../include/particle.h"
 #include <iostream>
+#include "../include/coordinate.h"
 
 TailPart::TailPart(float circleRadius, sf::Vector2f initialPosition, float initialAlpha)
     :alpha(50)
@@ -55,6 +56,35 @@ void Particle::updateArrows()
     arrows[0].points[1].position = position + velocity;
     arrows[1].points[0].position = position;
     arrows[1].points[1].position = position + acceleration;
+}
+
+void Particle::draw(sf::RenderWindow& window)
+{
+    for (auto& tailPart : tail)
+    {
+        tailPart.circle.setPosition(worldToScreen(tailPart.circle.getPosition().x, tailPart.circle.getPosition().y));
+        window.draw(tailPart.circle);
+        tailPart.circle.setPosition(screenToWorld(tailPart.circle.getPosition()));
+    }
+
+    for (int i = 0; i < vertices.getVertexCount(); i++)
+    {
+        vertices[i].position = worldToScreen(vertices[i].position.x, vertices[i].position.y);
+    }
+    window.draw(vertices);
+    for (int i = 0; i < vertices.getVertexCount(); i++)
+    {
+        vertices[i].position = screenToWorld(vertices[i].position);
+    }
+
+    for (int i = 0; i < arrows.size(); i++)
+    {
+        arrows[i].points[0].position = worldToScreen(arrows[i].points[0].position.x, arrows[i].points[0].position.y);
+        arrows[i].points[1].position = worldToScreen(arrows[i].points[1].position.x, arrows[i].points[1].position.y);
+        window.draw(arrows[i].points);
+        arrows[i].points[0].position = screenToWorld(arrows[i].points[0].position);
+        arrows[i].points[1].position = screenToWorld(arrows[i].points[1].position);
+    }
 }
 
 // Cursed c++ (ChatGPT wrote this i have no clue what it means)

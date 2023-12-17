@@ -1,3 +1,3 @@
 #pragma once
 
-void printVec(sf::Vector2f& vector);
+void printVec(const sf::Vector2f& vector);

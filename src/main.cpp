@@ -16,14 +16,19 @@ int main()
     sf::Font font;
     if (!font.loadFromFile("./fonts/LiberationSans-Regular.ttf"))
     {
+        std::cout << "searching for font file...";
         if (!font.loadFromFile("../fonts/LiberationSans-Regular.ttf"))
         {
-            if (!font.loadFromFile("../../fonts/LiberationSans-Regular.ttf"))
-            {
-                std::cout << "error: font load failed" << std::endl;
-            }
+            std::cout << "searching for font file...";
+                if (!font.loadFromFile("../../fonts/LiberationSans-Regular.ttf"))
+                {
+                    std::cout << "error: font load failed" << std::endl;
+                }
+                else std::cout << "found font file LiberationSans-Regular.ttf" << std::endl;
         }
+        else std::cout << "found font file LiberationSans-Regular.ttf" << std::endl;
     }
+    else std::cout << "found font file LiberationSans-Regular.ttf" << std::endl;
 
     sf::Text text;
     text.setFont(font);
@@ -43,6 +48,8 @@ int main()
     sf::RectangleShape center = sf::RectangleShape(sf::Vector2f(10,10));
     center.setPosition(-5, 5);
     center.setFillColor(sf::Color(255, 255, 255));
+    static float centerColorValue;
+    centerColorValue = 255;
 
     while (window.isOpen())
     {
@@ -89,6 +96,14 @@ int main()
         std::string fpsString = "fps: " + std::to_string(fps) + "   particles: "+std::to_string(particles.size());
         text.setString(fpsString);
 
+        if (centerColorValue < 255 || center.getFillColor() != sf::Color().White)
+        {
+            centerColorValue += 500 * deltaTime;
+            center.setFillColor(sf::Color(round(centerColorValue), round(centerColorValue), 255, 255));
+            if (centerColorValue > 255)
+                centerColorValue = 255;
+        }
+
         // the clear, draw, display cycle
         window.clear(sf::Color::Black);
 
@@ -96,10 +111,12 @@ int main()
         {
             sf::Vector2f& velocity = particle.velocity;
 
-            if (getMagnitude(particle.position) < 1)
+            if (getMagnitude(particle.position) < 4)
             {
                 particles.erase(std::remove(particles.begin(), particles.end(), particle), particles.end());
                 std::cout << "particle destroyed by center" << std::endl;
+                center.setFillColor(sf::Color().Blue);
+                centerColorValue = 0;
                 break;
             }
 
@@ -111,10 +128,9 @@ int main()
             particle.setVerticesPositions();
             particle.updateArrows();
 
-            //note that the end of the tail is the start of the vector
-            particle.maxTailSize = 750.f * exp(-0.001f * getMagnitude(particle.velocity));
-            if (particle.maxTailSize > 3000)
-                particle.maxTailSize = 3000;
+            // size of tail is calculated using speed of the particle
+            // note that the end of the tail is the start of the vector
+            particle.maxTailSize = 900.f * exp(-0.003f * getMagnitude(particle.velocity));
             if (particle.tail.size() <  particle.maxTailSize)
             {
                 TailPart tailPart(0.6, particle.position, 255);
@@ -136,32 +152,6 @@ int main()
                         particle.tail[i].circle.setFillColor(sf::Color(255, 255, 255, round(particle.tail[i].alpha)));
                     }
                 }
-            }
-            
-            for (auto& tailPart : particle.tail)
-            {
-                tailPart.circle.setPosition(worldToScreen(tailPart.circle.getPosition().x, tailPart.circle.getPosition().y));
-                window.draw(tailPart.circle);
-                tailPart.circle.setPosition(screenToWorld(tailPart.circle.getPosition()));
-            }
-            
-            for (int i = 0; i < particle.vertices.getVertexCount(); i++)
-            {
-                particle.vertices[i].position = worldToScreen(particle.vertices[i].position.x, particle.vertices[i].position.y);
-            }
-            window.draw(particle.vertices);
-            for (int i = 0; i < particle.vertices.getVertexCount(); i++)
-            {
-                particle.vertices[i].position = screenToWorld(particle.vertices[i].position);
-            }
-            
-            for (int i = 0; i < particle.arrows.size(); i++)
-            {
-                particle.arrows[i].points[0].position = worldToScreen(particle.arrows[i].points[0].position.x, particle.arrows[i].points[0].position.y);
-                particle.arrows[i].points[1].position = worldToScreen(particle.arrows[i].points[1].position.x, particle.arrows[i].points[1].position.y);
-                window.draw(particle.arrows[i].points);
-                particle.arrows[i].points[0].position = screenToWorld(particle.arrows[i].points[0].position);
-                particle.arrows[i].points[1].position = screenToWorld(particle.arrows[i].points[1].position);
             }
             
             particle.locatorActive = true;
@@ -206,6 +196,7 @@ int main()
             }
             if (particle.locatorActive)
                 window.draw(particle.locator);
+            particle.draw(window);
         }
         if (isMousePressed) {
             line[0].position = worldToScreen(line[0].position.x, line[0].position.y);

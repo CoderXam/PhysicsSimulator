@@ -36,4 +36,5 @@ public:
     void Move(float timeInterval);
     void setVerticesPositions();
     void updateArrows();
+    void draw(sf::RenderWindow& window);
 };
