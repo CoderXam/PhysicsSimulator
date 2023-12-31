@@ -47,7 +47,7 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
     cmake --build build
     ```
 
-    If you want to make any changes to existing source files, save the files then run make or enter the cmake --build command again to rebuild the project. No need to recreate the makefiles (or equivalent).
+    If you want to make any changes to existing source files, save the files then do `cmake --build` command again to rebuild the project. No need to recreate the makefiles (or equivalent).
 
 1. If you use Linux, install SFML's dependencies using your system package manager. On Ubuntu and other Debian-based distributions you can use the following commands:
     ```
