@@ -36,15 +36,19 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
     - [Qt Creator](https://doc.qt.io/qtcreator/creator-project-cmake.html)
   
 1. Using CMake from the command line is straightforward as well. To generate the build system:
-    `cmake -S . -B build -G <generator-name>`
+    ```
+    cmake -S . -B build -G <generator-name>
+    ```
 
     If no generator is specified cmake will choose a default (Use `cmake --help` to see the list of generators).
 
     Once the files have been generated you can then run Make or use the command
-    `cmake --build build`
+    ```
+    cmake --build build
+    ```
 
     If you want to make any changes to existing source files, save the files then run make or enter the cmake --build command again to rebuild the project. No need to recreate the makefiles (or equivalent).
- 1. 
+
 1. If you use Linux, install SFML's dependencies using your system package manager. On Ubuntu and other Debian-based distributions you can use the following commands:
     ```
     sudo apt update
