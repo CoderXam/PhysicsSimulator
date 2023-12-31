@@ -29,24 +29,36 @@ Go to [Releases](https://github.com/CoderXam/PhysicsSimulator/releases/) and dow
 - Something to build executables (example: GNU Make or MinGW Make)
 - Something to compile c++ code (example: gcc/g++)
 
-1. If you want to add or remove any .cpp files, open [CMakeLists.txt](CMakeLists.txt) and change the source files listed in the [`add_executable`](CMakeLists.txt#L10) call in CMakeLists.txt to match the source files your project requires.
-1. To generate the build system:
-    ```
-    cmake -S . -B build -G <generator-name>
-    ```
-    If no generator is specified cmake will choose a default. If you are on windows this will likely be a visual studio solution generator which I personally tend to avoid as you might have to change a few settings.
+1. Most popular IDEs support CMake projects with very little effort on your part.
+    - [VS Code](https://code.visualstudio.com) via the [CMake extension](https://code.visualstudio.com/docs/cpp/cmake-linux)
+    - [Visual Studio](https://docs.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=msvc-170)
+    - [CLion](https://www.jetbrains.com/clion/features/cmake-support.html)
+    - [Qt Creator](https://doc.qt.io/qtcreator/creator-project-cmake.html)
+  
+1. Using CMake from the command line is straightforward as well. To generate the build system:
+    `cmake -S . -B build -G <generator-name>`
 
-1. Once the files have been generated you can then run Make or use the command
-    ```
-    cmake --build build
-    ```
+    If no generator is specified cmake will choose a default (Use `cmake --help` to see the list of generators).
 
-    For help using cmake run
+    Once the files have been generated you can then run Make or use the command
+    `cmake --build build`
+
+    If you want to make any changes to existing source files, save the files then run make or enter the cmake --build command again to rebuild the project. No need to recreate the makefiles (or equivalent).
+ 1. 
+1. If you use Linux, install SFML's dependencies using your system package manager. On Ubuntu and other Debian-based distributions you can use the following commands:
     ```
-    cmake --help
+    sudo apt update
+    sudo apt install \
+        libxrandr-dev \
+        libxcursor-dev \
+        libudev-dev \
+        libfreetype-dev \
+        libopenal-dev \
+        libflac-dev \
+        libvorbis-dev \
+        libgl1-mesa-dev \
+        libegl1-mesa-dev
     ```
-1. If you want to make any changes to existing source files, save the files then run make or enter the cmake --build command again to rebuild the project. No need to recreate the makefiles (or equivalent).
-1. The executable will be created somewhere in the build directory.
 1. Not sure how to properly set up for debug and release modes yet. I think it builds in release by default.
 
 ## Resources
