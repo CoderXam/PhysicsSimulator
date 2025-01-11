@@ -1,3 +1,7 @@
 Blah Blah Blah
+<<<<<<< HEAD
 
 bruh
+=======
+aaaaaaa
+>>>>>>> 60922e35cdeff9e74dbcdd6705abdaf297b8353f
